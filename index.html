@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Agile Transition Management — Advisory &amp; Transformation</title>
-  <meta name="description" content="Agile Transition Management AB helps organisations navigate digital transformation, M&amp;A integration, and leadership development with senior advisory expertise." />
+  <meta name="description" content="Agile Transition Management AB helps organisations navigate digital transformation, M&amp;A integration, AI adoption, and leadership development with senior advisory expertise." />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Playfair+Display:wght@700&display=swap" rel="stylesheet" />
   <style>
@@ -81,7 +81,9 @@
     .hero {
       min-height: 92vh;
       display: flex; align-items: center;
-      background: linear-gradient(135deg, #0f4c75 0%, #1b262c 100%);
+      background:
+        linear-gradient(135deg, rgba(15,76,117,.85) 0%, rgba(27,38,44,.80) 100%),
+        url('https://images.unsplash.com/photo-1564425247688-a04ac3f16aa4?w=1600&q=80') center/cover no-repeat;
       color: #fff;
       padding-top: 64px;
     }
@@ -114,16 +116,23 @@
     .service-card h3 { margin-bottom: .5rem; font-size: 1.15rem; }
     .service-card p { color: #555; font-size: .93rem; }
 
+    /* ── Photo divider ────────────────────────── */
+    .photo-divider {
+      width: 100%;
+      height: 340px;
+      object-fit: cover;
+    }
+
     /* ── About ────────────────────────────────── */
     .about { padding: 5rem 0; background: #f0f4f8; }
     .about-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 3rem; align-items: center; }
     .about-text h3 { font-size: 1.15rem; color: #0f4c75; margin-bottom: .3rem; }
     .about-text p { color: #555; font-size: .95rem; margin-bottom: 1.5rem; }
-    .about-placeholder {
-      width: 100%; aspect-ratio: 1; border-radius: 16px;
-      background: linear-gradient(135deg,#0f4c75,#3282b8);
-      display: flex; align-items: center; justify-content: center;
-      color: #fff; font-size: 3rem; font-weight: 700;
+    .about-image {
+      width: 100%;
+      border-radius: 16px;
+      object-fit: cover;
+      aspect-ratio: 1;
     }
     @media (max-width: 768px) {
       .about-grid { grid-template-columns: 1fr; }
@@ -172,7 +181,7 @@
     </div>
   </nav>
 
-  <!-- ─── Hero ────────────────────────────────── -->
+  <!-- ─── Hero (background: Swedish countryside) ── -->
   <section class="hero">
     <div class="container">
       <h1>Navigate Change.<br>Accelerate Growth.</h1>
@@ -209,9 +218,9 @@
         </div>
 
         <div class="service-card">
-          <div class="service-icon">📊</div>
-          <h3>Agile &amp; Organisational Design</h3>
-          <p>Pragmatic agile adoption tailored to your context — not template frameworks. We redesign organisations around value streams, not silos.</p>
+          <div class="service-icon">🤖</div>
+          <h3>AI Agentic Coding &amp; Automation</h3>
+          <p>Harness the power of AI coding agents — from Claude to GitHub Copilot — to radically accelerate software delivery, automate workflows, and unlock capabilities that were impossible just months ago. We help you adopt agentic AI strategically, not as a gimmick.</p>
         </div>
 
         <div class="service-card">
@@ -230,21 +239,34 @@
     </div>
   </section>
 
+  <!-- ─── Photo divider: Skåne rapeseed fields ── -->
+  <img
+    src="https://images.unsplash.com/photo-1530533718754-001d2668365a?w=1600&q=80"
+    alt="Golden rapeseed fields in Skåne, southern Sweden"
+    class="photo-divider"
+    loading="lazy"
+  />
+
   <!-- ─── About ───────────────────────────────── -->
   <section class="about" id="about">
     <div class="container">
       <h2 class="section-title">Who We Are</h2>
       <p class="section-sub">Senior practitioners, not career consultants.</p>
       <div class="about-grid">
-        <div class="about-placeholder">ATM</div>
+        <img
+          src="https://images.unsplash.com/photo-1588880331179-bc9b93a8cb5e?w=800&q=80"
+          alt="Coastal landscape in Skåne, Sweden"
+          class="about-image"
+          loading="lazy"
+        />
         <div class="about-text">
           <p>
             <strong>Agile Transition Management AB</strong> was founded to bridge the gap between strategy and execution.
-            We are a lean, senior advisory firm based in Sweden that partners with organisations across
+            We are a lean, senior advisory firm based in Skåne, Sweden, that partners with organisations across
             the Nordics and Europe.
           </p>
           <p>
-            Our team blends deep experience in technology leadership, M&amp;A integration, agile transformation,
+            Our team blends deep experience in technology leadership, M&amp;A integration, AI-driven transformation,
             and executive coaching. We bring people who have sat in your chair — CTOs, transformation leads,
             and board advisors with decades of hands-on experience.
           </p>
@@ -307,7 +329,7 @@
           🔗&nbsp; <a href="https://www.linkedin.com/in/thomasschiffer/" target="_blank" rel="noopener">LinkedIn</a>
         </div>
         <div>
-          📍&nbsp; Stockholm, Sweden
+          📍&nbsp; Hjärup, Sweden
         </div>
       </div>
       <p style="margin-top:1.5rem;font-size:.85rem;color:#8daabb;">
