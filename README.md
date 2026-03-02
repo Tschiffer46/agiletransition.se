@@ -23,3 +23,10 @@ This guide covers:
 - Troubleshooting common issues
 - Where to put images in Vite/React repos
 - GitHub Actions workflow templates
+
+### Handover & Maintenance Guide
+
+📖 **[docs/Handover-Maintenance-Guide-EN.md](docs/Handover-Maintenance-Guide-EN.md)** (English)
+📖 **[docs/Handover-Maintenance-Guide-SV.md](docs/Handover-Maintenance-Guide-SV.md)** (Svenska)
+
+Comprehensive handover documentation covering architecture, security, hosting, deployment, software maintenance, and troubleshooting for all four websites in the solution.
