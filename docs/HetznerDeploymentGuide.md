@@ -73,6 +73,9 @@ Required GitHub Secrets:
 | `SERVER_SSH_KEY` | Private SSH key for the deploy user |
 
 ### Type B — Full-stack apps (Next.js + database)
+
+> **⚠️ Note:** Type B deployments are significantly more complex and have more failure modes. For simple marketing/company websites, always prefer Type A (static site with rsync). Only use Type B if the site genuinely requires a server-side database.
+
 These are more complex. GitHub Actions builds a Docker image, pushes it to the GitHub Container Registry (GHCR), then SSHes into the server and updates the master `docker-compose.yml` to run the new app and its database.
 
 Required GitHub Secrets:
@@ -81,7 +84,7 @@ Required GitHub Secrets:
 | `SERVER_HOST` | 89.167.90.112 |
 | `SERVER_USER` | deploy |
 | `SERVER_SSH_KEY` | Private SSH key for the deploy user |
-| `GHCR_TOKEN` | GitHub Personal Access Token with `write:packages` scope |
+| `GHCR_TOKEN` | GitHub Personal Access Token with `write:packages` scope — **alternatively, use the automatic `GITHUB_TOKEN` (preferred, no manual PAT needed); the workflow just needs `permissions: packages: write`** |
 | `DB_PASSWORD` | MariaDB user password |
 | `DB_ROOT_PASSWORD` | MariaDB root password |
 | `ADMIN_PASSWORD` | Admin panel password |
@@ -184,10 +187,10 @@ nano /home/deploy/hosting/docker-compose.yml
     env_file:
       - .env.customername
     environment:
-      MYSQL_ROOT_PASSWORD: ${DB_ROOT_PASSWORD}
-      MYSQL_DATABASE: customername
-      MYSQL_USER: customername
-      MYSQL_PASSWORD: ${DB_PASSWORD}
+      MARIADB_ROOT_PASSWORD: ${DB_ROOT_PASSWORD}
+      MARIADB_DATABASE: customername
+      MARIADB_USER: customername
+      MARIADB_PASSWORD: ${DB_PASSWORD}
     volumes:
       - customername_db_data:/var/lib/mysql
     healthcheck:
@@ -195,6 +198,7 @@ nano /home/deploy/hosting/docker-compose.yml
       interval: 10s
       timeout: 5s
       retries: 5
+      start_period: 120s
     networks:
       - web
 ```
@@ -204,7 +208,15 @@ And add to the `volumes:` section at the bottom:
   customername_db_data:
 ```
 
-Then restart only the new containers (this does NOT affect other running sites):
+Then restart only the new containers (this does NOT affect other running sites).
+
+**Important:** Before running `docker compose up`, make sure the target directory exists and is owned by `deploy`:
+```bash
+mkdir -p /home/deploy/hosting/sites/client-customername/dist
+chown -R deploy:deploy /home/deploy/hosting/sites/client-customername
+```
+
+Then start the container:
 ```bash
 cd /home/deploy/hosting
 docker compose up -d customername
@@ -225,6 +237,156 @@ When you receive access to the customer's real domain (e.g. `customername.se`):
 4. **Get the SSL certificate** in the new proxy host
 5. **Turn the Cloudflare proxy back ON** (orange cloud)
 6. **Delete or update the old preview proxy host** (`customername.agiletransition.se`) if no longer needed
+
+---
+
+## Where to Put Images (Vite/React Sites)
+
+For Vite/React sites (Type A), images go in the `public/` folder. Everything in `public/` is copied as-is to the build output (`dist/`).
+
+### Recommended folder structure
+
+```
+public/
+├── favicon.ico
+└── assets/
+    ├── hero/
+    │   └── hero.jpg              (1920×1080px min, background image)
+    ├── logo/
+    │   ├── logo.png              (200×60px, white/transparent, for dark backgrounds)
+    │   └── logo-dark.png         (200×60px, dark version, optional)
+    ├── team/
+    │   ├── founders.jpg          (1000×667px, group photo)
+    │   ├── person-name.jpg       (400×400px, square portrait)
+    │   └── ...
+    ├── og/
+    │   └── og-image.jpg          (1200×630px exactly, for social sharing)
+    └── partners/                  (if applicable)
+        ├── partner-name.png      (PNG, transparent background)
+        └── ...
+```
+
+### How to add images
+
+1. Add the image files to the correct folder in the repo
+2. Commit and push to `main`
+3. GitHub Actions will build and deploy automatically — images are included in the `dist/` output
+
+### How to reference images in code
+
+In React components, reference images in `public/` using absolute paths from the root:
+```tsx
+<img src="/assets/hero/hero.jpg" alt="Hero" />
+<img src="/assets/logo/logo.png" alt="Logo" />
+```
+
+### Image guidelines
+
+- Use `.jpg` or `.webp` for photos (keep under 500KB each)
+- Use `.png` with transparent background for logos
+- Always optimize images before committing (use tinypng.com or similar)
+- Each image folder should contain a `README.md` listing required files and sizes
+
+---
+
+## GitHub Actions Workflow Template
+
+### For static sites (Type A) — with build step (Vite/React)
+
+Create `.github/workflows/deploy.yml`:
+
+```yaml
+# Required GitHub Secrets (same names used across all ATM AB deployments):
+#   SERVER_HOST     - IP address or hostname of the Hetzner server
+#   SERVER_USER     - SSH username (deploy)
+#   SERVER_SSH_KEY  - Private SSH key content for authentication
+#
+# To add secrets: GitHub repo → Settings → Secrets and variables → Actions → New repository secret
+
+name: Deploy to Hetzner
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build
+        run: npm run build
+
+      - name: Setup SSH
+        run: |
+          mkdir -p ~/.ssh
+          echo "${{ secrets.SERVER_SSH_KEY }}" > ~/.ssh/id_ed25519
+          chmod 600 ~/.ssh/id_ed25519
+          ssh-keyscan -H ${{ secrets.SERVER_HOST }} > ~/.ssh/known_hosts
+
+      - name: Deploy to server
+        run: |
+          rsync -avz --delete \
+            --exclude='.git' \
+            --exclude='.github' \
+            --exclude='README.md' \
+            --exclude='node_modules' \
+            -e "ssh -i ~/.ssh/id_ed25519" \
+            ./dist/ ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_HOST }}:~/hosting/sites/client-CUSTOMERNAME/dist/
+```
+
+Replace `CUSTOMERNAME` with the container name used in `docker-compose.yml`.
+
+### For static sites (Type A) — plain HTML (no build step)
+
+```yaml
+name: Deploy to Hetzner
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup SSH
+        run: |
+          mkdir -p ~/.ssh
+          echo "${{ secrets.SERVER_SSH_KEY }}" > ~/.ssh/id_ed25519
+          chmod 600 ~/.ssh/id_ed25519
+          ssh-keyscan -H ${{ secrets.SERVER_HOST }} > ~/.ssh/known_hosts
+
+      - name: Deploy to server
+        run: |
+          rsync -avz --delete \
+            --exclude='.git' \
+            --exclude='.github' \
+            --exclude='README.md' \
+            --exclude='CNAME' \
+            -e "ssh -i ~/.ssh/id_ed25519" \
+            ./ ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_HOST }}:~/hosting/sites/client-CUSTOMERNAME/dist/
+```
 
 ---
 
@@ -258,6 +420,10 @@ Open `https://customername.agiletransition.se` — it should load correctly.
 | SSL certificate fails | Make sure DNS is pointing to `89.167.90.112` and Cloudflare proxy is OFF (grey cloud) during certificate issuance |
 | Site shows blank page | Check that the `dist/` folder has files in it — it may be empty if the first deploy hasn't run yet |
 | Nginx Proxy Manager shows wrong port | Edit the proxy host and update the Forward Port — `80` for static, `3000` for Next.js |
+| `sudo: a password is required` during deploy | The deploy workflow should NOT use `sudo`. If rsync fails with permission denied, check that the target directory exists and is owned by `deploy` — run `chown -R deploy:deploy ~/hosting/sites/client-X` as root |
+| rsync `Permission denied` on first deploy | The target directory doesn't exist yet. As root, run: `mkdir -p /home/deploy/hosting/sites/client-X/dist && chown -R deploy:deploy /home/deploy/hosting/sites/client-X` |
+| Docker compose file corrupted by automated script | Never let GitHub Actions modify docker-compose.yml via scripts. Always edit it manually on the server. Use Type A (static rsync) deployments. |
+| Container running but site shows old/wrong content | The container may be using a cached image. Run: `cd /home/deploy/hosting && docker compose down containername && docker compose up -d containername` |
 
 ---
 
