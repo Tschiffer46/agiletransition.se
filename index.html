@@ -6,16 +6,40 @@
   <title>Agile Transition Management — Advisory &amp; Transformation</title>
   <meta name="description" content="Agile Transition Management AB helps organisations navigate digital transformation, M&amp;A integration, AI adoption, and leadership development with senior advisory expertise." />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Playfair+Display:wght@700&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:wght@700&display=swap" rel="stylesheet" />
   <style>
+    /* ── Design Tokens ────────────────────────── */
+    :root {
+      --primary: #0F172A;
+      --secondary: #334155;
+      --cta: #CA8A04;
+      --cta-hover: #A16207;
+      --cta-light: rgba(202,138,4,.1);
+      --bg: #F8FAFC;
+      --bg-alt: #F1F5F9;
+      --text: #020617;
+      --text-muted: #475569;
+      --text-light: #94A3B8;
+      --white: #FFFFFF;
+      --border: #E2E8F0;
+      --shadow-sm: 0 1px 3px rgba(15,23,42,.06), 0 1px 2px rgba(15,23,42,.04);
+      --shadow-md: 0 4px 16px rgba(15,23,42,.08);
+      --shadow-lg: 0 12px 28px rgba(15,23,42,.1);
+      --radius: 10px;
+      --radius-lg: 16px;
+    }
+
     /* ── Reset & Base ─────────────────────────── */
     *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
     html { scroll-behavior: smooth; }
     body {
       font-family: 'Inter', sans-serif;
-      color: #1a1a2e;
-      line-height: 1.7;
-      background: #fafafa;
+      color: var(--text);
+      line-height: 1.75;
+      background: var(--bg);
+      font-size: 16px;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
     }
     img { max-width: 100%; display: block; }
     a { color: inherit; text-decoration: none; }
@@ -24,58 +48,94 @@
     .container { max-width: 1100px; margin: 0 auto; padding: 0 1.5rem; }
     .btn {
       display: inline-block;
-      padding: .85rem 2rem;
-      border-radius: 6px;
+      padding: .9rem 2.2rem;
+      border-radius: 8px;
       font-weight: 600;
-      font-size: .95rem;
-      transition: background .3s, transform .15s;
+      font-size: .9rem;
+      letter-spacing: 0.02em;
+      transition: all .3s ease;
       cursor: pointer;
+      border: none;
     }
-    .btn-primary { background: #0f4c75; color: #fff; }
-    .btn-primary:hover { background: #093552; transform: translateY(-2px); }
-    .btn-outline { border: 2px solid #0f4c75; color: #0f4c75; }
-    .btn-outline:hover { background: #0f4c75; color: #fff; }
+    .btn-primary { background: var(--primary); color: var(--white); }
+    .btn-primary:hover { background: var(--secondary); transform: translateY(-2px); }
+    .btn-outline { border: 2px solid var(--primary); color: var(--primary); }
+    .btn-outline:hover { background: var(--primary); color: var(--white); }
+    .btn-gold { background: var(--cta); color: var(--white); }
+    .btn-gold:hover { background: var(--cta-hover); transform: translateY(-2px); }
     .section-title {
       font-family: 'Playfair Display', serif;
-      font-size: 2.2rem;
+      font-size: clamp(1.8rem, 3vw, 2.6rem);
+      color: var(--primary);
+      letter-spacing: -0.02em;
       margin-bottom: .6rem;
     }
+    .section-title::after {
+      content: '';
+      display: block;
+      width: 48px;
+      height: 3px;
+      background: var(--cta);
+      margin-top: .75rem;
+      border-radius: 2px;
+    }
+    .text-center .section-title::after {
+      margin-left: auto;
+      margin-right: auto;
+    }
     .section-sub {
-      color: #555;
+      color: var(--text-muted);
       max-width: 620px;
       margin-bottom: 2.5rem;
+      font-size: 1.05rem;
+      line-height: 1.8;
     }
     .text-center { text-align: center; }
 
     /* ── Nav ──────────────────────────────────── */
     nav {
       position: fixed; top: 0; width: 100%; z-index: 100;
-      background: rgba(255,255,255,.92);
-      backdrop-filter: blur(8px);
-      border-bottom: 1px solid #e8e8e8;
+      background: rgba(248,250,252,.95);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border);
+      transition: box-shadow .3s ease;
     }
+    nav.scrolled { box-shadow: 0 1px 12px rgba(15,23,42,.08); }
     nav .container {
       display: flex; align-items: center; justify-content: space-between;
       height: 64px;
     }
-    .logo { font-weight: 700; font-size: 1.15rem; color: #0f4c75; }
-    .nav-links { display: flex; gap: 1.8rem; list-style: none; }
-    .nav-links a { font-size: .9rem; font-weight: 600; color: #333; transition: color .2s; }
-    .nav-links a:hover { color: #0f4c75; }
+    .logo {
+      font-weight: 700;
+      font-size: 1.15rem;
+      color: var(--primary);
+      letter-spacing: -0.01em;
+    }
+    .logo::after {
+      content: '.';
+      color: var(--cta);
+    }
+    .nav-links { display: flex; gap: 1.8rem; list-style: none; align-items: center; }
+    .nav-links a { font-size: .88rem; font-weight: 600; color: var(--secondary); transition: color .2s; }
+    .nav-links a:hover { color: var(--cta); }
+    .btn-nav-cta {
+      background: var(--cta);
+      color: var(--white) !important;
+      padding: .5rem 1.2rem;
+      border-radius: 6px;
+      font-size: .85rem;
+      font-weight: 600;
+      transition: background .3s, transform .15s;
+    }
+    .btn-nav-cta:hover {
+      background: var(--cta-hover);
+      transform: translateY(-1px);
+    }
 
     /* ── Hamburger (mobile) ───────────────────── */
     .hamburger { display: none; flex-direction: column; gap: 5px; cursor: pointer; background: none; border: none; }
-    .hamburger span { width: 24px; height: 2px; background: #333; border-radius: 2px; transition: .3s; }
-    @media (max-width: 768px) {
-      .hamburger { display: flex; }
-      .nav-links {
-        display: none; flex-direction: column; position: absolute;
-        top: 64px; left: 0; width: 100%; background: #fff;
-        padding: 1rem 1.5rem; gap: 1rem;
-        border-bottom: 1px solid #e8e8e8;
-      }
-      .nav-links.open { display: flex; }
-    }
+    .hamburger span { width: 24px; height: 2px; background: var(--secondary); border-radius: 2px; transition: .3s; }
 
     /* ── Hero ─────────────────────────────────── */
     .hero {
@@ -83,51 +143,67 @@
       display: flex; align-items: center;
       position: relative;
       overflow: hidden;
-      color: #fff;
+      color: var(--white);
       padding-top: 64px;
-      /* Dynamic swoosh background: abstract flowing light streaks */
       background:
         url('https://images.unsplash.com/photo-1544819667-9bfc1de23d4e?w=1920&q=85') center/cover no-repeat;
     }
-    /* Gradient overlay with diagonal energy */
     .hero::before {
       content: '';
       position: absolute;
       inset: 0;
       background:
-        linear-gradient(135deg,
-          rgba(15,76,117,.92) 0%,
-          rgba(50,130,184,.70) 40%,
-          rgba(27,38,44,.88) 100%);
+        linear-gradient(160deg,
+          rgba(15,23,42,.95) 0%,
+          rgba(51,65,85,.80) 45%,
+          rgba(15,23,42,.92) 100%);
       z-index: 1;
     }
-    /* Animated swoosh accent line */
     .hero::after {
       content: '';
       position: absolute;
-      bottom: -60px;
-      left: -10%;
-      width: 120%;
-      height: 180px;
-      background: rgba(187,225,250,.12);
-      border-radius: 50%;
-      transform: rotate(-3deg);
+      bottom: 80px;
+      left: 5%;
+      width: 90%;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, rgba(202,138,4,.3), transparent);
       z-index: 2;
+      border-radius: 0;
+      transform: none;
     }
     .hero .container {
       position: relative;
       z-index: 3;
     }
+    .hero-tagline {
+      font-size: .85rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: .15em;
+      color: var(--cta);
+      margin-bottom: 1rem;
+    }
     .hero h1 {
       font-family: 'Playfair Display', serif;
-      font-size: clamp(2rem, 5vw, 3.4rem);
-      line-height: 1.2;
-      margin-bottom: 1.2rem;
+      font-size: clamp(2.2rem, 5.5vw, 3.6rem);
+      line-height: 1.15;
+      letter-spacing: -0.02em;
+      margin-bottom: 1.4rem;
     }
-    .hero p { max-width: 560px; font-size: 1.1rem; color: #c9d6df; margin-bottom: 2rem; }
-    .hero .btn-primary { background: #bbe1fa; color: #0f4c75; }
-    .hero .btn-primary:hover { background: #a4d4ec; }
-    /* Swoosh decorative curves */
+    .hero p { max-width: 540px; font-size: 1.1rem; color: #CBD5E1; margin-bottom: 2.2rem; line-height: 1.8; }
+    .hero .btn-primary {
+      background: var(--cta);
+      color: var(--white);
+      font-weight: 600;
+      padding: 1rem 2.4rem;
+      border-radius: 8px;
+      box-shadow: 0 4px 14px rgba(202,138,4,.3);
+    }
+    .hero .btn-primary:hover {
+      background: var(--cta-hover);
+      box-shadow: 0 6px 20px rgba(202,138,4,.4);
+      transform: translateY(-2px);
+    }
     .hero-swoosh {
       position: absolute;
       bottom: 0; left: 0; width: 100%;
@@ -141,69 +217,217 @@
     }
 
     /* ── Services ─────────────────────────────── */
-    .services { padding: 5rem 0; }
+    .services { padding: 6rem 0; }
     .services-grid {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
       gap: 2rem;
     }
     .service-card {
-      background: #fff;
-      border-radius: 12px;
-      padding: 2rem;
-      box-shadow: 0 2px 12px rgba(0,0,0,.06);
-      transition: transform .2s, box-shadow .2s;
+      background: var(--white);
+      border-radius: var(--radius-lg);
+      padding: 2.2rem;
+      border: 1px solid var(--border);
+      box-shadow: var(--shadow-sm);
+      transition: transform .25s ease, box-shadow .25s ease, border-color .25s ease;
     }
-    .service-card:hover { transform: translateY(-4px); box-shadow: 0 8px 24px rgba(0,0,0,.1); }
-    .service-icon { font-size: 2rem; margin-bottom: 1rem; }
-    .service-card h3 { margin-bottom: .5rem; font-size: 1.15rem; }
-    .service-card p { color: #555; font-size: .93rem; }
+    .service-card:hover {
+      transform: translateY(-6px);
+      box-shadow: var(--shadow-lg);
+      border-color: var(--cta);
+    }
+    .service-icon {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 56px;
+      height: 56px;
+      border-radius: 12px;
+      background: var(--cta-light);
+      color: var(--cta);
+      margin-bottom: 1.2rem;
+    }
+    .service-icon svg { width: 28px; height: 28px; }
+    .text-center .service-icon { margin-left: auto; margin-right: auto; }
+    .service-card h3 {
+      margin-bottom: .5rem;
+      font-size: 1.15rem;
+      font-weight: 700;
+      color: var(--primary);
+    }
+    .service-card p { color: var(--text-muted); font-size: .93rem; line-height: 1.7; }
 
-    /* ── Photo divider ────────────────────────── */
-    .photo-divider {
-      width: 100%;
-      height: 340px;
-      object-fit: cover;
+    /* ── Section Divider ──────────────────────── */
+    .section-divider {
+      padding: 4rem 0;
+      background: linear-gradient(135deg, var(--primary) 0%, #1E293B 100%);
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+    .section-divider::before {
+      content: '';
+      position: absolute;
+      top: -50%;
+      right: -20%;
+      width: 400px;
+      height: 400px;
+      background: radial-gradient(circle, rgba(202,138,4,.08) 0%, transparent 70%);
+      border-radius: 50%;
+    }
+    .divider-quote {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(1.2rem, 2.5vw, 1.5rem);
+      font-style: italic;
+      color: rgba(248,250,252,.75);
+      letter-spacing: -0.01em;
+      position: relative;
+      z-index: 1;
     }
 
     /* ── About ────────────────────────────────── */
-    .about { padding: 5rem 0; background: #f0f4f8; }
-    .about-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 3rem; align-items: center; }
-    .about-text h3 { font-size: 1.15rem; color: #0f4c75; margin-bottom: .3rem; }
-    .about-text p { color: #555; font-size: .95rem; margin-bottom: 1.5rem; }
+    .about { padding: 6rem 0; background: var(--bg-alt); }
+    .about-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 4rem; align-items: start; }
+    .about-text h3 {
+      font-size: 1.15rem;
+      color: var(--primary);
+      margin-bottom: .4rem;
+      font-weight: 700;
+    }
+    .about-text p { color: var(--text-muted); font-size: .95rem; margin-bottom: 1.5rem; line-height: 1.8; }
     .about-image {
       width: 100%;
-      border-radius: 16px;
+      border-radius: var(--radius-lg);
       object-fit: cover;
-      aspect-ratio: 1;
-    }
-    @media (max-width: 768px) {
-      .about-grid { grid-template-columns: 1fr; }
+      aspect-ratio: 4/5;
+      box-shadow: var(--shadow-md);
     }
 
     /* ── Why Us ───────────────────────────────── */
-    .why { padding: 5rem 0; }
-    .why-list { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px,1fr)); gap: 2rem; }
-    .why-item { text-align: center; }
-    .why-item .num { font-size: 2.5rem; font-weight: 700; color: #0f4c75; }
-    .why-item p { color: #555; font-size: .93rem; margin-top: .3rem; }
+    .why { padding: 6rem 0; background: var(--primary); color: var(--white); }
+    .why .section-title { color: var(--white); }
+    .why .section-title::after { background: var(--cta); }
+    .why .section-sub { color: #94A3B8; }
+    .why-list { display: grid; grid-template-columns: repeat(4, 1fr); gap: 2rem; }
+    .why-item {
+      text-align: center;
+      padding: 2rem 1rem;
+      border-radius: var(--radius);
+      background: rgba(255,255,255,.05);
+      border: 1px solid rgba(255,255,255,.08);
+      transition: background .3s, border-color .3s;
+    }
+    .why-item:hover {
+      background: rgba(255,255,255,.08);
+      border-color: var(--cta);
+    }
+    .why-item .num {
+      font-family: 'Playfair Display', serif;
+      font-size: 2.8rem;
+      font-weight: 700;
+      color: var(--cta);
+      line-height: 1.2;
+    }
+    .why-item p { color: #CBD5E1; font-size: .93rem; margin-top: .5rem; line-height: 1.7; }
 
     /* ── Contact ──────────────────────────────── */
-    .contact { padding: 5rem 0; background: #0f4c75; color: #fff; }
-    .contact .section-sub { color: #c9d6df; }
-    .contact-info { display: flex; flex-wrap: wrap; gap: 2rem; margin-top: 1.5rem; }
-    .contact-info div { font-size: .95rem; }
-    .contact-info a { color: #bbe1fa; text-decoration: underline; }
+    .contact {
+      padding: 6rem 0;
+      background: linear-gradient(135deg, var(--primary) 0%, #1E293B 100%);
+      color: var(--white);
+      position: relative;
+      overflow: hidden;
+    }
+    .contact::before {
+      content: '';
+      position: absolute;
+      top: -30%;
+      right: -15%;
+      width: 500px;
+      height: 500px;
+      background: radial-gradient(circle, rgba(202,138,4,.06) 0%, transparent 70%);
+      border-radius: 50%;
+      pointer-events: none;
+    }
+    .contact .section-title { color: var(--white); }
+    .contact .section-title::after { background: var(--cta); }
+    .contact .section-sub { color: rgba(248,250,252,.6); }
+    .contact-info { display: flex; flex-wrap: wrap; gap: 2.5rem; margin-top: 2rem; position: relative; z-index: 1; }
+    .contact-info div { font-size: .95rem; display: flex; align-items: center; gap: .5rem; }
+    .contact-info svg { width: 18px; height: 18px; color: var(--cta); flex-shrink: 0; }
+    .contact-info a { color: var(--cta); text-decoration: none; font-weight: 600; transition: color .2s; }
+    .contact-info a:hover { color: #EAB308; text-decoration: underline; }
 
     /* ── Footer ───────────────────────────────── */
     footer {
-      padding: 1.5rem 0;
+      padding: 2rem 0;
       text-align: center;
       font-size: .82rem;
-      color: #888;
-      background: #1b262c;
+      color: #94A3B8;
+      background: #020617;
+      border-top: 1px solid rgba(255,255,255,.06);
     }
-    footer a { color: #bbe1fa; }
+    footer a { color: var(--cta); }
+
+    /* ── Scroll Animations ────────────────────── */
+    .reveal {
+      opacity: 0;
+      transform: translateY(24px);
+      transition: opacity .7s ease, transform .7s ease;
+    }
+    .reveal.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    .reveal-stagger .service-card,
+    .reveal-stagger .why-item {
+      opacity: 0;
+      transform: translateY(20px);
+      transition: opacity .5s ease, transform .5s ease;
+    }
+    .reveal-stagger.visible .service-card,
+    .reveal-stagger.visible .why-item {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    .reveal-stagger.visible .service-card:nth-child(1),
+    .reveal-stagger.visible .why-item:nth-child(1) { transition-delay: 0s; }
+    .reveal-stagger.visible .service-card:nth-child(2),
+    .reveal-stagger.visible .why-item:nth-child(2) { transition-delay: .1s; }
+    .reveal-stagger.visible .service-card:nth-child(3),
+    .reveal-stagger.visible .why-item:nth-child(3) { transition-delay: .15s; }
+    .reveal-stagger.visible .service-card:nth-child(4),
+    .reveal-stagger.visible .why-item:nth-child(4) { transition-delay: .2s; }
+    .reveal-stagger.visible .service-card:nth-child(5) { transition-delay: .25s; }
+    .reveal-stagger.visible .service-card:nth-child(6) { transition-delay: .3s; }
+
+    /* ── Tablet Breakpoint ────────────────────── */
+    @media (max-width: 1024px) {
+      .why-list { grid-template-columns: repeat(2, 1fr); }
+      .about-grid { gap: 2.5rem; }
+      .services-grid { grid-template-columns: repeat(2, 1fr); }
+      .container { max-width: 900px; }
+    }
+
+    /* ── Mobile Breakpoint ────────────────────── */
+    @media (max-width: 768px) {
+      .hamburger { display: flex; }
+      .nav-links {
+        display: none; flex-direction: column; position: absolute;
+        top: 64px; left: 0; width: 100%; background: var(--bg);
+        padding: 1rem 1.5rem; gap: 1rem;
+        border-bottom: 1px solid var(--border);
+        box-shadow: 0 4px 12px rgba(15,23,42,.06);
+      }
+      .nav-links.open { display: flex; }
+      .btn-nav-cta { text-align: center; width: 100%; display: block; }
+      .services-grid { grid-template-columns: 1fr; }
+      .about-grid { grid-template-columns: 1fr; }
+      .about-image { aspect-ratio: 16/9; }
+      .why-list { grid-template-columns: 1fr; }
+      .contact-info { flex-direction: column; gap: 1.2rem; }
+      .section-title { font-size: clamp(1.6rem, 5vw, 2rem); }
+    }
   </style>
 </head>
 <body>
@@ -220,21 +444,22 @@
         <li><a href="#about">About</a></li>
         <li><a href="#why">Why Us</a></li>
         <li><a href="#contact">Contact</a></li>
+        <li><a href="#contact" class="btn-nav-cta">Get in Touch</a></li>
       </ul>
     </div>
   </nav>
 
-  <!-- ─── Hero with swoosh ────────────────────── -->
+  <!-- ─── Hero ────────────────────────────────── -->
   <section class="hero">
     <div class="container">
+      <p class="hero-tagline">Advisory &amp; Transformation</p>
       <h1>Navigate Change.<br>Accelerate Growth.</h1>
       <p>We partner with ambitious organisations to drive digital transformation, integrate acquisitions seamlessly, and build resilient leadership — delivering lasting impact.</p>
       <a href="#contact" class="btn btn-primary">Start a Conversation</a>
     </div>
-    <!-- SVG swoosh wave at bottom -->
     <div class="hero-swoosh">
       <svg viewBox="0 0 1440 80" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
-        <path d="M0,40 C360,100 720,-20 1080,50 C1260,70 1380,30 1440,40 L1440,80 L0,80 Z" fill="#fafafa"/>
+        <path d="M0,40 C360,100 720,-20 1080,50 C1260,70 1380,30 1440,40 L1440,80 L0,80 Z" fill="#F8FAFC"/>
       </svg>
     </div>
   </section>
@@ -242,44 +467,56 @@
   <!-- ─── Services ────────────────────────────── -->
   <section class="services" id="services">
     <div class="container text-center">
-      <h2 class="section-title">What We Do</h2>
-      <p class="section-sub" style="margin-left:auto;margin-right:auto;">
+      <h2 class="section-title reveal">What We Do</h2>
+      <p class="section-sub reveal" style="margin-left:auto;margin-right:auto;">
         Our advisory practice spans the full lifecycle of organisational change — from strategy through execution.
       </p>
-      <div class="services-grid">
+      <div class="services-grid reveal-stagger">
 
         <div class="service-card">
-          <div class="service-icon">🔄</div>
+          <div class="service-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 1 1-9-9"/><path d="M21 3v6h-6"/></svg>
+          </div>
           <h3>Digital Transformation</h3>
           <p>End-to-end guidance on modernising technology, processes, and culture. We help you build a digital-first organisation that outperforms the competition.</p>
         </div>
 
         <div class="service-card">
-          <div class="service-icon">🤝</div>
+          <div class="service-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20.5 17.5L12 22l-8.5-4.5"/><path d="M20 12.5L12 17l-8-4.5"/><path d="M12 2l8 4.5L12 11 4 6.5 12 2z"/></svg>
+          </div>
           <h3>M&amp;A Advisory &amp; Integration</h3>
           <p>From due diligence to Day 100+ integration planning, we ensure mergers and acquisitions create real synergies — not just spreadsheets.</p>
         </div>
 
         <div class="service-card">
-          <div class="service-icon">🎯</div>
+          <div class="service-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg>
+          </div>
           <h3>Management &amp; Leadership Coaching</h3>
           <p>One-on-one and team coaching for C-suite executives and emerging leaders navigating complexity, change, and high-stakes decisions.</p>
         </div>
 
         <div class="service-card">
-          <div class="service-icon">🤖</div>
+          <div class="service-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="4" width="16" height="16" rx="2"/><path d="M9 9h.01M15 9h.01M9 15h.01M15 15h.01"/><path d="M9 9v6M15 9v6M9 12h6"/></svg>
+          </div>
           <h3>AI Agentic Coding &amp; Automation</h3>
           <p>Harness the power of AI coding agents — from Claude to GitHub Copilot — to radically accelerate software delivery, automate workflows, and unlock capabilities that were impossible just months ago. We help you adopt agentic AI strategically, not as a gimmick.</p>
         </div>
 
         <div class="service-card">
-          <div class="service-icon">⚡</div>
+          <div class="service-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>
+          </div>
           <h3>Interim Management</h3>
           <p>Experienced leaders on demand. We step in as interim CTO, CDO, or transformation lead to bridge critical capability gaps.</p>
         </div>
 
         <div class="service-card">
-          <div class="service-icon">🛡️</div>
+          <div class="service-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="M9 12l2 2 4-4"/></svg>
+          </div>
           <h3>Technology Due Diligence</h3>
           <p>Independent assessment of technology stacks, teams, and technical debt for investors and boards making high-value decisions.</p>
         </div>
@@ -288,20 +525,19 @@
     </div>
   </section>
 
-  <!-- ─── Photo divider: Skåne rapeseed fields ── -->
-  <img
-    src="https://images.unsplash.com/photo-1530533718754-001d2668365a?w=1600&q=80"
-    alt="Golden rapeseed fields in Skåne, southern Sweden"
-    class="photo-divider"
-    loading="lazy"
-  />
+  <!-- ─── Section Divider ─────────────────────── -->
+  <div class="section-divider" aria-hidden="true">
+    <div class="container">
+      <p class="divider-quote">"Strategy without execution is hallucination."</p>
+    </div>
+  </div>
 
   <!-- ─── About ───────────────────────────────── -->
   <section class="about" id="about">
     <div class="container">
-      <h2 class="section-title">Who We Are</h2>
-      <p class="section-sub">Senior practitioners, not career consultants.</p>
-      <div class="about-grid">
+      <h2 class="section-title reveal">Who We Are</h2>
+      <p class="section-sub reveal">Senior practitioners, not career consultants.</p>
+      <div class="about-grid reveal">
         <img
           src="https://images.unsplash.com/photo-1500382017468-9049fed747ef?w=800&q=80"
           alt="Green rolling fields in Skåne during early summer"
@@ -324,7 +560,7 @@
             Thomas brings 25+ years of experience spanning technology leadership, large-scale digital transformations,
             and M&amp;A advisory. His career includes senior roles across consulting, financial services, and technology companies,
             with a consistent focus on making organisations more adaptive and effective.
-            <a href="https://www.linkedin.com/in/thomasschiffer/" target="_blank" rel="noopener" style="color:#0f4c75;text-decoration:underline;">LinkedIn →</a>
+            <a href="https://www.linkedin.com/in/thomasschiffer/" target="_blank" rel="noopener" style="color:var(--cta);text-decoration:underline;font-weight:600;">LinkedIn →</a>
           </p>
           <p>
             Depending on the engagement, Thomas works alongside a curated network of seasoned specialists —
@@ -338,11 +574,11 @@
   <!-- ─── Why Us ──────────────────────────────── -->
   <section class="why" id="why">
     <div class="container text-center">
-      <h2 class="section-title">Why Clients Choose Us</h2>
-      <p class="section-sub" style="margin-left:auto;margin-right:auto;">
+      <h2 class="section-title reveal">Why Clients Choose Us</h2>
+      <p class="section-sub reveal" style="margin-left:auto;margin-right:auto;">
         We deliver outcomes, not slide decks.
       </p>
-      <div class="why-list">
+      <div class="why-list reveal-stagger">
         <div class="why-item">
           <div class="num">25+</div>
           <p>Years of combined leadership experience in technology, transformation, and M&amp;A</p>
@@ -366,22 +602,26 @@
   <!-- ─── Contact ─────────────────────────────── -->
   <section class="contact" id="contact">
     <div class="container">
-      <h2 class="section-title">Let's Talk</h2>
-      <p class="section-sub">
+      <h2 class="section-title reveal">Let's Talk</h2>
+      <p class="section-sub reveal">
         Whether you're exploring a transformation, preparing for an acquisition, or need a trusted sounding board — we'd love to hear from you.
       </p>
-      <div class="contact-info">
+      <div class="contact-info reveal">
         <div>
-          📧&nbsp; <a href="mailto:info@agiletransition.se">info@agiletransition.se</a>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="M22 4l-10 8L2 4"/></svg>
+          <a href="mailto:info@agiletransition.se">info@agiletransition.se</a>
         </div>
         <div>
-          🔗&nbsp; <a href="https://www.linkedin.com/in/thomasschiffer/" target="_blank" rel="noopener">LinkedIn</a>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-4 0v7h-4v-7a6 6 0 0 1 6-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg>
+          <a href="https://www.linkedin.com/in/thomasschiffer/" target="_blank" rel="noopener">LinkedIn</a>
         </div>
         <div>
-          📍&nbsp; Hjärup, Sweden
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 1 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+          Hjärup, Sweden
         </div>
       </div>
-      <p style="margin-top:1.5rem;font-size:.85rem;color:#8daabb;">
+      <a href="mailto:info@agiletransition.se" class="btn btn-gold reveal" style="margin-top:2rem;">Get in Touch</a>
+      <p style="margin-top:1.5rem;font-size:.85rem;color:var(--text-light);">
         Agile Transition Management AB &middot; Org.nr 559378-3045
       </p>
     </div>
@@ -390,9 +630,35 @@
   <!-- ─── Footer ──────────────────────────────── -->
   <footer>
     <div class="container">
-      &copy; 2026 Agile Transition Management AB. All rights reserved. 🚀
+      &copy; 2026 Agile Transition Management AB. All rights reserved.
     </div>
   </footer>
+
+  <script>
+    // Scroll reveal
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(e => {
+        if (e.isIntersecting) {
+          e.target.classList.add('visible');
+          observer.unobserve(e.target);
+        }
+      });
+    }, { threshold: 0.15 });
+    document.querySelectorAll('.reveal, .reveal-stagger').forEach(el => observer.observe(el));
+
+    // Nav scroll shadow
+    const nav = document.querySelector('nav');
+    window.addEventListener('scroll', () => {
+      nav.classList.toggle('scrolled', window.scrollY > 20);
+    }, { passive: true });
+
+    // Close mobile menu on link click
+    document.querySelectorAll('.nav-links a').forEach(a => {
+      a.addEventListener('click', () => {
+        document.querySelector('.nav-links').classList.remove('open');
+      });
+    });
+  </script>
 
 </body>
 </html>
